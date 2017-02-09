@@ -15,8 +15,16 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField "String", "BASE_SERVER_URL", "\"http://www.chicme.com\""
+            buildConfigField "String", "BASE_SAFE_URL", "\"https://www.chicme.com\""
             minifyEnabled false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "BASE_SERVER_URL", "\"http://www.chicme.xyz\""
+            buildConfigField "String", "BASE_SAFE_URL", "\"https://www.chicme.xyz\""
+            debuggable true
         }
     }
 
@@ -26,6 +34,7 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
@@ -38,6 +47,12 @@ dependencies {
     compile rootProject.ext.libDagger
     annotationProcessor rootProject.ext.libDaggerCompiler
     compile rootProject.ext.libGson
+    compile rootProject.ext.libRetrofit
+    compile rootProject.ext.libRetrofitConverterGson
+    compile rootProject.ext.libRetrofitAdapterRxJava
+    compile rootProject.ext.libOkHttpLoggingInterceptor
+    compile rootProject.ext.libRxAndroid
+    compile rootProject.ext.libRxJava
 
     testCompile 'junit:junit:4.12'
 }
