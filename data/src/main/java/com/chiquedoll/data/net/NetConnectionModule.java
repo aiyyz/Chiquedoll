@@ -34,13 +34,15 @@ public class NetConnectionModule {
 
     private static final String TAG = "NetConnectionModule";
     private final Context context;
+    private final boolean useRxJava;
 
-    public NetConnectionModule(Context context) {
+    public NetConnectionModule(Context context,boolean useRxJava) {
         this.context = context;
+        this.useRxJava = useRxJava;
     }
 
     @Provides
-    public Retrofit provideRetrofit(boolean useRxJava, OkHttpClient okHttpClient){
+    public Retrofit provideRetrofit(OkHttpClient okHttpClient){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_SERVER_URL)
                 .addConverterFactory(GsonConverterFactory.create())
