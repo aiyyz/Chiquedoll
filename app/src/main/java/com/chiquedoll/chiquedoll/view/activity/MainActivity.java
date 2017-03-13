@@ -1,7 +1,9 @@
-package com.chiquedoll.chiquedoll;
+package com.chiquedoll.chiquedoll.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.chiquedoll.chiquedoll.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,6 @@
+
 apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -13,6 +15,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             buildConfigField "String", "BASE_SERVER_URL", "\"http://www.chicme.com\""
@@ -26,6 +29,10 @@ android {
             buildConfigField "String", "BASE_SAFE_URL", "\"https://www.chicme.xyz\""
             debuggable true
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     packagingOptions {
@@ -53,6 +60,7 @@ dependencies {
     compile rootProject.ext.libOkHttpLoggingInterceptor
     compile rootProject.ext.libRxAndroid
     compile rootProject.ext.libRxJava
-
+//    compile rootProject.ext.libGuava
     testCompile 'junit:junit:4.12'
+    compile project(':domain')
 }

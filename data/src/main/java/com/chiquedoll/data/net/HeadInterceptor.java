@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -11,6 +12,9 @@ import java.util.Locale;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static dagger.internal.Preconditions.checkNotNull;
+
 
 /**
  * Created by super-zuo on 17-2-9.
@@ -21,8 +25,8 @@ public class HeadInterceptor implements Interceptor {
     private static String countryCode = Locale.getDefault().getCountry();
     private final Context context;
 
-    public HeadInterceptor(Context context) {
-        this.context = context;
+    public HeadInterceptor(@NonNull Context context) {
+        this.context = checkNotNull(context,"Context cannot be null");
     }
 
     @Override

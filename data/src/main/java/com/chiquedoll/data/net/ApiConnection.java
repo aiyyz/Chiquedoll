@@ -1,6 +1,7 @@
 package com.chiquedoll.data.net;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.chiquedoll.data.BuildConfig;
 
@@ -15,8 +16,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import dagger.Module;
-import dagger.Provides;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -27,34 +26,53 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by super-zuo on 17-2-9.
+ * Created by super-zuo on 17-2-21.
  */
-@Module
-public class NetConnectionModule {
+public class ApiConnection {
 
-    private static final String TAG = "NetConnectionModule";
-    private final Context context;
-    private final boolean useRxJava;
+    private Retrofit mRetrofit;
+    private ApiConnection mInstance;
+    private ApiConnection mNoRxjavaInstance;
 
-    public NetConnectionModule(Context context,boolean useRxJava) {
-        this.context = context;
-        this.useRxJava = useRxJava;
+    private ApiConnection(Context context) {
+        this(context, true);
     }
 
-    @Provides
-    public Retrofit provideRetrofit(OkHttpClient okHttpClient){
+    public ApiConnection getInstance(Context context) {
+        if (mInstance == null) {
+            synchronized (ApiConnection.class) {
+                if (mInstance == null) {
+                    mInstance = new ApiConnection(context);
+                }
+            }
+        }
+        return mInstance;
+    }
+
+    public ApiConnection getNoRxjavaInstance(Context context) {
+        if (mNoRxjavaInstance == null) {
+            synchronized (ApiConnection.class) {
+                if (mNoRxjavaInstance == null) {
+                    mNoRxjavaInstance = new ApiConnection(context, false);
+                }
+            }
+        }
+        return mNoRxjavaInstance;
+    }
+
+    private ApiConnection(Context context, boolean useRxJava) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_SERVER_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient);
+                .client(getClient(context));
         if (useRxJava) {
             builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
         }
-        return builder.build();
+        mRetrofit = builder.build();
     }
 
-    @Provides
-    public OkHttpClient provideOkHttpClient(){
+    @NonNull
+    private OkHttpClient getClient(Context context) {
         // log用拦截器
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 
@@ -126,6 +144,5 @@ public class NetConnectionModule {
                 })
                 .build();
     }
-
 
 }
