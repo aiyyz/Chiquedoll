@@ -1,16 +1,15 @@
-package com.chiquedoll.chiquedoll.view.activity;
+package com.chiquedoll.chiquedoll.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import com.chiquedoll.chiquedoll.view.mvpview.MvpView;
 import com.chiquedoll.chiquedoll.view.presenter.MvpPresenter;
 
 /**
- * Created by super-zuo on 17-3-2.
+ * Created by super-zuo on 17-3-21.
  */
 
-public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> extends BaseActivity implements MvpView {
+public abstract class MvpFragment<V extends MvpView,P extends MvpPresenter<V>>extends BaseFragment {
 
     @SuppressWarnings("unchecked")
     @Override
@@ -20,28 +19,25 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         getPresenter().resume();
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         getPresenter().pause();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         getPresenter().detachView(isRetainingInstance());
         getPresenter().destroy();
     }
 
-    @Override
-    public Context context() {
-        return getApplicationContext();
-    }
+
 
     public abstract P getPresenter();
 

@@ -3,6 +3,7 @@ package com.chiquedoll.data.net;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+
 import com.chiquedoll.data.BuildConfig;
 
 import java.security.cert.CertificateException;
@@ -22,7 +23,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -31,14 +32,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiConnection {
 
     private Retrofit mRetrofit;
-    private ApiConnection mInstance;
-    private ApiConnection mNoRxjavaInstance;
+    private static ApiConnection mInstance;
+    private static ApiConnection mNoRxjavaInstance;
 
     private ApiConnection(Context context) {
         this(context, true);
     }
 
-    public ApiConnection getInstance(Context context) {
+    public static ApiConnection getInstance(Context context) {
         if (mInstance == null) {
             synchronized (ApiConnection.class) {
                 if (mInstance == null) {
@@ -49,7 +50,7 @@ public class ApiConnection {
         return mInstance;
     }
 
-    public ApiConnection getNoRxjavaInstance(Context context) {
+    public static ApiConnection getNoRxjavaInstance(Context context) {
         if (mNoRxjavaInstance == null) {
             synchronized (ApiConnection.class) {
                 if (mNoRxjavaInstance == null) {
@@ -66,9 +67,13 @@ public class ApiConnection {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient(context));
         if (useRxJava) {
-            builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+            builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
         }
         mRetrofit = builder.build();
+    }
+
+    public <T> T createApi(Class<T> clazz){
+        return mRetrofit.create(clazz);
     }
 
     @NonNull
@@ -80,7 +85,7 @@ public class ApiConnection {
         if (BuildConfig.DEBUG) {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         } else {
-            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         }
 
         // 如果使用到HTTPS，我们需要创建SSLSocketFactory，并设置到client
@@ -126,7 +131,7 @@ public class ApiConnection {
                 .readTimeout(10, TimeUnit.SECONDS)
                 .sslSocketFactory(sslSocketFactory)
                 // 信任所有主机名
-//                .hostnameVerifier((hostname, session) -> true)
+                .hostnameVerifier((hostname, session) -> true)
                 // 这里我们使用host name作为cookie保存的key
                 .cookieJar(new CookieJar() {
                     private final HashMap<HttpUrl, List<Cookie>> cookieStore = new HashMap<>();

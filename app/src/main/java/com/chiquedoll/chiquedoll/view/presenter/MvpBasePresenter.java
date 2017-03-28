@@ -1,6 +1,6 @@
 package com.chiquedoll.chiquedoll.view.presenter;
 
-import com.chiquedoll.chiquedoll.view.MvpView;
+import com.chiquedoll.chiquedoll.view.mvpview.MvpView;
 
 import java.lang.ref.WeakReference;
 
@@ -28,11 +28,6 @@ public abstract class MvpBasePresenter<V extends MvpView> implements MvpPresente
             viewRef.clear();
             viewRef = null;
         }
-    }
-
-    @Override
-    public void initialize() {
-
     }
 
     @Override

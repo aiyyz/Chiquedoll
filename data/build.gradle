@@ -20,6 +20,8 @@ android {
         release {
             buildConfigField "String", "BASE_SERVER_URL", "\"http://www.chicme.com\""
             buildConfigField "String", "BASE_SAFE_URL", "\"https://www.chicme.com\""
+            buildConfigField "String", "INTERFACE_VERSION", "\"/v7/\""
+
             minifyEnabled false
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -27,6 +29,7 @@ android {
         debug {
             buildConfigField "String", "BASE_SERVER_URL", "\"http://www.chicme.xyz\""
             buildConfigField "String", "BASE_SAFE_URL", "\"https://www.chicme.xyz\""
+            buildConfigField "String", "INTERFACE_VERSION", "\"/v7/\""
             debuggable true
         }
     }
@@ -60,7 +63,9 @@ dependencies {
     compile rootProject.ext.libOkHttpLoggingInterceptor
     compile rootProject.ext.libRxAndroid
     compile rootProject.ext.libRxJava
-//    compile rootProject.ext.libGuava
-    testCompile 'junit:junit:4.12'
+    compile rootProject.ext.libGuava
     compile project(':domain')
+
+    testCompile rootProject.ext.libMockito
+    testCompile rootProject.ext.libJunit
 }

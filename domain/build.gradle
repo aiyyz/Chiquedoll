@@ -7,24 +7,16 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 
-configurations {
-    provided
-}
-
-sourceSets {
-    main {
-        compileClasspath += configurations.provided
-    }
-}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile rootProject.ext.libGson
     compile rootProject.ext.libRxJava
     compile rootProject.ext.libJavaxInject
+    compile rootProject.ext.libJavaxAnnotation
+    compile rootProject.ext.libGuava
 
-    provided rootProject.ext.libDaggerCompiler
-    provided rootProject.ext.libJavaxAnnotation
-
+    testCompile rootProject.ext.libMockito
+    testCompile rootProject.ext.libJunit
 }
 
 

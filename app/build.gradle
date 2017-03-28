@@ -15,14 +15,29 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField "String", "BASE_SERVER_URL", "\"http://www.chicme.com\""
+            buildConfigField "String", "BASE_SAFE_URL", "\"https://www.chicme.com\""
+            buildConfigField "String", "INTERFACE_VERSION", "\"/v7/\""
             minifyEnabled false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "BASE_SERVER_URL", "\"http://www.chicme.xyz\""
+            buildConfigField "String", "BASE_SAFE_URL", "\"https://www.chicme.xyz\""
+            buildConfigField "String", "INTERFACE_VERSION", "\"/v7/\""
+            debuggable true
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    dataBinding {
+        enabled = true
+    }
+
     packagingOptions {
         exclude 'LICENSE.txt'
         exclude 'META-INF/DEPENDENCIES'
@@ -47,10 +62,14 @@ dependencies {
     compile rootProject.ext.libDagger
     annotationProcessor rootProject.ext.libDaggerCompiler
     compile rootProject.ext.libGuava
+    compile rootProject.ext.libDesign
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+
     debugCompile rootProject.ext.libDebugLeakcanary
     releaseCompile rootProject.ext.libReleaseLeakcanary
+
     testCompile rootProject.ext.libTestLeakcanary
+    testCompile rootProject.ext.libJunit
+    androidTestCompile rootProject.ext.libMockito
 
-
-    testCompile 'junit:junit:4.12'
 }

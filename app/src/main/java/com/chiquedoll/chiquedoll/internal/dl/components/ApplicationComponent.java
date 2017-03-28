@@ -1,8 +1,8 @@
 package com.chiquedoll.chiquedoll.internal.dl.components;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 
+import com.chiquedoll.chiquedoll.internal.dl.modules.ApiModule;
 import com.chiquedoll.chiquedoll.internal.dl.modules.ApplicationModule;
 import com.chiquedoll.chiquedoll.view.activity.BaseActivity;
 import com.chquedoll.domain.executor.PostExecutionThread;
@@ -16,7 +16,7 @@ import dagger.Component;
  * Created by super-zuo on 17-2-22.
  */
 @Singleton
-@Component(modules = ApplicationModule.class)
+@Component(modules = {ApplicationModule.class, ApiModule.class})
 public interface ApplicationComponent {
     void inject(BaseActivity baseActivity);
 

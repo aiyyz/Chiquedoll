@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: 'buildsystem/dependencies.gradle'
-def daggerVersion = "2.9"
-def retrofitVersion = "2.1.0"
+def daggerVersion = "2.10"
+def retrofitVersion = "2.2.0"
 def supportVersion = "25.2.0"
 
 project.ext {
@@ -9,15 +9,15 @@ project.ext {
     compileSdkVersion = 25
     minSdkVersion = 17
     targetSdkVersion = 25
-    versionCode = 1
-    versionName = "1.0.0"
+    versionCode = 53
+    versionName = "3.4.3"
 
     libSupportAppcompat = "com.android.support:appcompat-v7:${supportVersion}"
     libSupportDesign = "com.android.support:design:${supportVersion}"
     libSupportRecyclerview = "com.android.support:recyclerview-v7:${supportVersion}"
     libSupportV4 = "com.android.support:support-v4:${supportVersion}"
     libGuava = "com.google.guava:guava:20.0"
-
+    libDesign = "com.android.support:design:${supportVersion}"
 
     libRxAndroid = "io.reactivex.rxjava2:rxandroid:2.0.1"
     libRxJava = "io.reactivex.rxjava2:rxjava:2.0.5"
@@ -27,8 +27,8 @@ project.ext {
     libGson = "com.google.code.gson:gson:2.8.0"
     libRetrofit = "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     libRetrofitConverterGson = "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
-    libRetrofitAdapterRxJava = "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
-    libOkHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.0.0-RC1"
+    libRetrofitAdapterRxJava = "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+    libOkHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.6.0"
 
     libDagger = "com.google.dagger:dagger:${daggerVersion}"
     libDaggerCompiler = "com.google.dagger:dagger-compiler:${daggerVersion}"
@@ -36,6 +36,9 @@ project.ext {
     libDebugLeakcanary = 'com.squareup.leakcanary:leakcanary-android:1.5'
     libReleaseLeakcanary = 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     libTestLeakcanary = 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    libMockito = 'org.mockito:mockito-core:2.+'
+    libJunit = 'junit:junit:4.12'
 
 }
 buildscript {

@@ -4,6 +4,7 @@ package com.chquedoll.domain.interactor;
 
 import com.chquedoll.domain.executor.PostExecutionThread;
 import com.chquedoll.domain.executor.ThreadExecutor;
+import com.chquedoll.domain.module.BaseResponse;
 import com.google.common.base.Preconditions;
 
 import io.reactivex.Observable;
@@ -34,6 +35,7 @@ public abstract class UseCase<T, Params> {
 
     /**
      * Builds an {@link Observable} which will be used when executing the current {@link UseCase}.
+     * subclass must use {@link ResponseFilter<>} to filter the result.
      */
     abstract Observable<T> buildUseCaseObservable(Params params);
 
@@ -46,10 +48,12 @@ public abstract class UseCase<T, Params> {
      */
     public void execute(DisposableObserver<T> observer, Params params) {
         Preconditions.checkNotNull(observer);
-        final Observable<T> observable = this.buildUseCaseObservable(params)
+        final Observable<T> observable = this.buildUseCaseObservable(params);
+        observable
                 .subscribeOn(Schedulers.from(threadExecutor))
-                .observeOn(postExecutionThread.getScheduler());
-        addDisposable(observable.subscribeWith(observer));
+                .observeOn(postExecutionThread.getScheduler())
+                .subscribeWith(observer);
+        addDisposable(observer);
     }
 
     /**

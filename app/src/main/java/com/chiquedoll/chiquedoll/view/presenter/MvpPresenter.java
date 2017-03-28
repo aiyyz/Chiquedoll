@@ -1,6 +1,6 @@
 package com.chiquedoll.chiquedoll.view.presenter;
 
-import com.chiquedoll.chiquedoll.view.MvpView;
+import com.chiquedoll.chiquedoll.view.mvpview.MvpView;
 
 /**
  * Created by super-zuo on 17-3-2.

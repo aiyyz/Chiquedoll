@@ -5,10 +5,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import java.io.IOException;
 import java.util.Locale;
 
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -21,17 +23,39 @@ import static dagger.internal.Preconditions.checkNotNull;
  */
 
 public class HeadInterceptor implements Interceptor {
+
     private static String acceptLanguage = Locale.getDefault().getLanguage();
     private static String countryCode = Locale.getDefault().getCountry();
+    private static String userId = "";
     private final Context context;
 
+    public static void setAcceptLanguage(String acceptLanguage) {
+        HeadInterceptor.acceptLanguage = acceptLanguage;
+    }
+
+    public static void setCountryCode(String countryCode) {
+        HeadInterceptor.countryCode = countryCode;
+    }
+
+    public static void setUserId(String userId) {
+        HeadInterceptor.userId = userId;
+    }
+
+
     public HeadInterceptor(@NonNull Context context) {
-        this.context = checkNotNull(context,"Context cannot be null");
+        this.context = checkNotNull(context, "Context cannot be null");
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
+        HttpUrl.Builder userIdBuilder = null;
+        if (!TextUtils.isEmpty(userId)) {
+            userIdBuilder = original.url().newBuilder();
+            userIdBuilder
+                    .host(original.url().host() + "/L/" + userId)
+                    .scheme(original.url().scheme());
+        }
         Request.Builder builder = original.newBuilder();
         builder.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
                 .header("accept-language", acceptLanguage)
@@ -41,13 +65,15 @@ public class HeadInterceptor implements Interceptor {
                 .header("deviceType", "android")
                 .header("deviceId", getUniqueId())
                 .header("Accept-Encoding", "gzip,deflate");
-
-        return null;
+        if (userIdBuilder != null) {
+            builder.url(userIdBuilder.build());
+        }
+        return chain.proceed(builder.build());
     }
 
     private String getUniqueId() {
         // TODO: 17-2-9 wid
-        return null;
+        return 123 + "";
     }
 
     private String getVersionName() {
