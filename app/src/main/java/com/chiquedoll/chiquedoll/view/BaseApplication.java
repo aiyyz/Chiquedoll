@@ -1,11 +1,14 @@
 package com.chiquedoll.chiquedoll.view;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import com.chiquedoll.chiquedoll.BuildConfig;
 import com.chiquedoll.chiquedoll.internal.dl.components.ApplicationComponent;
 import com.chiquedoll.chiquedoll.internal.dl.components.DaggerApplicationComponent;
 import com.chiquedoll.chiquedoll.internal.dl.modules.ApplicationModule;
+import com.chiquedoll.data.utils.ACache;
+import com.chiquedoll.data.utils.DeviceUtils;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -20,8 +23,16 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initAdId();
         initializeInjector();
         initializeLeakDetection();
+    }
+
+    private void initAdId() {
+        String adId = ACache.get(getApplicationContext()).getAsString("AdId");
+        if (TextUtils.isEmpty(adId)) {
+            DeviceUtils.createAdId(getApplicationContext());
+        }
     }
 
     private void initializeLeakDetection() {
@@ -39,5 +50,6 @@ public class BaseApplication extends Application {
     public ApplicationComponent getApplicationComponent() {
         return applicationComponent;
     }
+
 
 }

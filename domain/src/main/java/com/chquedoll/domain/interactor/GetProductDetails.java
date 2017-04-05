@@ -28,7 +28,7 @@ public class GetProductDetails extends UseCase<Object, GetProductDetails.Params>
     @Override
     Observable<Object> buildUseCaseObservable(Params params) {
         Preconditions.checkNotNull(params, "The params can not be null!");
-        Observable<ProductDetailEntity> productDetailEntityObservable = productRepository.productDetail(params.productId, null).map(new ResponseFilter<>());
+        Observable<ProductDetailEntity> productDetailEntityObservable = productRepository.productDetail(params.productId, params.index).map(new ResponseFilter<>());
         Observable<ProductCommentEntity> productCommentEntityObservable = productRepository.productComment(params.productId).map(new ResponseFilter<>());
         return Observable.mergeDelayError(productDetailEntityObservable, productCommentEntityObservable);
 

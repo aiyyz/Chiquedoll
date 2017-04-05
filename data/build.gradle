@@ -64,6 +64,7 @@ dependencies {
     compile rootProject.ext.libRxAndroid
     compile rootProject.ext.libRxJava
     compile rootProject.ext.libGuava
+    compile rootProject.ext.libGoogleService
     compile project(':domain')
 
     testCompile rootProject.ext.libMockito

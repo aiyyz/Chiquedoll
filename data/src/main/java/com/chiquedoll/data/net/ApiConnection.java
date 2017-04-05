@@ -34,6 +34,8 @@ public class ApiConnection {
     private Retrofit mRetrofit;
     private static ApiConnection mInstance;
     private static ApiConnection mNoRxjavaInstance;
+    private final static String baseUrl = "http://www.chicme.xyz";
+//    private final static String baseUrl = "http://www.chicme.com";
 
     private ApiConnection(Context context) {
         this(context, true);
@@ -63,7 +65,7 @@ public class ApiConnection {
 
     private ApiConnection(Context context, boolean useRxJava) {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_SERVER_URL)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient(context));
         if (useRxJava) {

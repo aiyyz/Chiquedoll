@@ -1,6 +1,7 @@
 package com.chiquedoll.chiquedoll.view.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import com.chiquedoll.chiquedoll.view.mvpview.MvpView;
 import com.chiquedoll.chiquedoll.view.presenter.MvpPresenter;
@@ -11,10 +12,11 @@ import com.chiquedoll.chiquedoll.view.presenter.MvpPresenter;
 
 public abstract class MvpFragment<V extends MvpView,P extends MvpPresenter<V>>extends BaseFragment {
 
+
     @SuppressWarnings("unchecked")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         getPresenter().attachView((V) this);
     }
 

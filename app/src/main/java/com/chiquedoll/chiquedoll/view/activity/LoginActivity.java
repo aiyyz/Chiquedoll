@@ -1,6 +1,7 @@
 package com.chiquedoll.chiquedoll.view.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import com.chiquedoll.chiquedoll.R;
 import com.chiquedoll.chiquedoll.view.AppConstants;
 import com.chiquedoll.data.net.Api.RestApi;
 import com.chiquedoll.data.net.ApiConnection;
+import com.chiquedoll.data.net.HeadInterceptor;
 import com.chquedoll.domain.module.BaseResponse;
 import com.chquedoll.domain.module.LoginInResponse;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -69,6 +71,8 @@ public class LoginActivity extends RxActivity {
         @Override
         public void onNext(LoginInResponse loginInResponse) {
             Toast.makeText(LoginActivity.this, loginInResponse.getAccessToken(), Toast.LENGTH_LONG).show();
+            HeadInterceptor.setAccessToken(loginInResponse.getAccessToken());
+            HeadInterceptor.setUserId(loginInResponse.getCustomer().getId());
         }
 
         @Override
@@ -81,6 +85,7 @@ public class LoginActivity extends RxActivity {
         public void onComplete() {
             Toast.makeText(LoginActivity.this, "complete", Toast.LENGTH_LONG).show();
             dialog.dismiss();
+            startActivity(new Intent(LoginActivity.this,ProductDetailActivity.class));
         }
     }
 }

@@ -63,8 +63,10 @@ dependencies {
     annotationProcessor rootProject.ext.libDaggerCompiler
     compile rootProject.ext.libGuava
     compile rootProject.ext.libDesign
+    compile rootProject.ext.libDesign
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile rootProject.ext.libGoogleService
     debugCompile rootProject.ext.libDebugLeakcanary
     releaseCompile rootProject.ext.libReleaseLeakcanary
 

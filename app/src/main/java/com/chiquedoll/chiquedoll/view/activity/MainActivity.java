@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.chiquedoll.chiquedoll.R;
+import com.chiquedoll.chiquedoll.view.mvpview.ProductDetailView;
 
 public class MainActivity extends AppCompatActivity {
 

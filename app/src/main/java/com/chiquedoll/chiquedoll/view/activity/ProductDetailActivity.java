@@ -16,17 +16,32 @@ import com.chiquedoll.chiquedoll.view.fragment.ProductDetailFragment;
 public class ProductDetailActivity extends BaseActivity implements HasComponent<ProductDetailComponent> {
 
     private ProductDetailComponent productDetailComponent;
+    private String productId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_empty);
-        initializeActivity();
+        initializeActivity(savedInstanceState);
         initializeInjector();
     }
 
-    private void initializeActivity() {
-        addFragment(R.id.fragmentContainer,new ProductDetailFragment());
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (outState != null){
+            outState.putString("productId",productId);
+        }
+    }
+
+    private void initializeActivity(Bundle savedInstanceState) {
+
+        if (savedInstanceState == null) {
+            productId = getIntent().getStringExtra("productId");
+            addFragment(R.id.fragmentContainer, ProductDetailFragment.forProduct(this.productId));
+        } else {
+            productId = savedInstanceState.getString("productId");
+        }
     }
 
     private void initializeInjector() {

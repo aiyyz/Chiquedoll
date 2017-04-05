@@ -7,7 +7,10 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.chiquedoll.data.utils.DeviceUtils;
+
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.HttpUrl;
@@ -27,6 +30,12 @@ public class HeadInterceptor implements Interceptor {
     private static String acceptLanguage = Locale.getDefault().getLanguage();
     private static String countryCode = Locale.getDefault().getCountry();
     private static String userId = "";
+
+    public static void setAccessToken(String accessToken) {
+        HeadInterceptor.accessToken = accessToken;
+    }
+
+    private static String accessToken = "";
     private final Context context;
 
     public static void setAcceptLanguage(String acceptLanguage) {
@@ -52,11 +61,28 @@ public class HeadInterceptor implements Interceptor {
         HttpUrl.Builder userIdBuilder = null;
         if (!TextUtils.isEmpty(userId)) {
             userIdBuilder = original.url().newBuilder();
-            userIdBuilder
-                    .host(original.url().host() + "/L/" + userId)
-                    .scheme(original.url().scheme());
+            List<String> pathSegments = original.url().pathSegments();
+            if (pathSegments != null && pathSegments.size() > 2) {
+                userIdBuilder.setPathSegment(0, "L")
+                        .setPathSegment(1, userId);
+                for (int i = 0; i < pathSegments.size() - 2; i++) {
+                    userIdBuilder.setPathSegment(2 + i, pathSegments.get(i));
+                }
+                userIdBuilder.addPathSegment(pathSegments.get(pathSegments.size() - 2));
+                userIdBuilder.addPathSegment(pathSegments.get(pathSegments.size() - 1));
+            } else if (pathSegments != null && pathSegments.size() == 1) {
+                userIdBuilder.setPathSegment(0, "L")
+                        .setPathSegment(1, userId)
+                        .addPathSegment(pathSegments.get(0));
+            } else {
+                userIdBuilder.setPathSegment(0, "L")
+                        .setPathSegment(1, userId);
+            }
+
         }
+
         Request.Builder builder = original.newBuilder();
+
         builder.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
                 .header("accept-language", acceptLanguage)
                 .header("appVersion", getVersionName())
@@ -65,6 +91,9 @@ public class HeadInterceptor implements Interceptor {
                 .header("deviceType", "android")
                 .header("deviceId", getUniqueId())
                 .header("Accept-Encoding", "gzip,deflate");
+        if (!TextUtils.isEmpty(accessToken)) {
+            builder.header("accessToken", accessToken);
+        }
         if (userIdBuilder != null) {
             builder.url(userIdBuilder.build());
         }
@@ -72,8 +101,7 @@ public class HeadInterceptor implements Interceptor {
     }
 
     private String getUniqueId() {
-        // TODO: 17-2-9 wid
-        return 123 + "";
+        return DeviceUtils.getUniqueId(context);
     }
 
     private String getVersionName() {
@@ -83,8 +111,7 @@ public class HeadInterceptor implements Interceptor {
         PackageInfo packInfo;
         try {
             packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            String version = packInfo.versionName;
-            return version;
+            return packInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return null;
